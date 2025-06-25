@@ -132,10 +132,10 @@ services:
     - postgres
     environment:
       GUACD_HOSTNAME: guacd
-      POSTGRES_DATABASE: guacamole_db
-      POSTGRES_HOSTNAME: postgres
-      POSTGRES_PASSWORD: 'ChooseYourOwnPasswordHere1234'
-      POSTGRES_USER: guacamole_user
+      POSTGRESQL_DATABASE: guacamole_db
+      POSTGRESQL_HOSTNAME: postgres
+      POSTGRESQL_PASSWORD: 'ChooseYourOwnPasswordHere1234'
+      POSTGRESQL_USER: guacamole_user
       RECORDING_SEARCH_PATH: /record
     image: guacamole/guacamole
     networks:
