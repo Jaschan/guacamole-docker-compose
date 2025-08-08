@@ -356,7 +356,7 @@ a.ng-binding:not(.add-user):not(.button) {
 
 /* Custom Logo - Replace the default Guacamole logo */
 .login-ui .logo {
-    background-image: url('/guacamole/images/custom-logo.png?v=20250806') !important;
+    background-image: url('/images/custom-logo.png?v=20250806') !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
@@ -447,7 +447,7 @@ a.ng-binding:not(.add-user):not(.button) {
     transform: translateX(-50%);
     width: 120px;
     height: 40px;
-    background-image: url('/guacamole/images/custom-footer.png');
+    background-image: url('/images/custom-footer.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -475,7 +475,7 @@ body:after {
     right: 10px;
     width: 60px;
     height: 15px;
-    background-image: url('/guacamole/images/custom-footer.png');
+    background-image: url('/images/custom-footer.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
