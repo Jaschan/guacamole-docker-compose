@@ -115,13 +115,13 @@ div.login-ui {
   border: 1px solid #555 !important;
 }
 
-/* Login page buttons - keep our blue styling */
+/* Login page buttons - keep our turquoise styling */
 .login-ui input[type="submit"],
 .login-ui .login-fields input[type="submit"],
 .login-ui button,
 .login-ui .buttons input[type="submit"] {
-  background-color: #007bff !important;
-  border: 1px solid #007bff !important;
+  background-color: #00BBE4 !important;
+  border: 1px solid #00BBE4 !important;
   color: #ffffff !important;
   border-radius: 6px !important;
   padding: 10px 20px !important;
@@ -135,10 +135,10 @@ div.login-ui {
 .login-ui .login-fields input[type="submit"]:hover,
 .login-ui button:hover,
 .login-ui .buttons input[type="submit"]:hover {
-  background-color: #0056b3 !important;
-  border-color: #0056b3 !important;
+  background-color: #0098B8 !important;
+  border-color: #0098B8 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3) !important;
+  box-shadow: 0 2px 4px rgba(0, 187, 228, 0.3) !important;
 }
 
 /* Login page input fields - keep our styling */
@@ -159,9 +159,9 @@ div.login-ui {
 .login-ui .login-fields input[type="text"]:focus,
 .login-ui .login-fields input[type="password"]:focus {
   background-color: #555 !important;
-  border-color: #007bff !important;
+  border-color: #00BBE4 !important;
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+  box-shadow: 0 0 0 2px rgba(0, 187, 228, 0.25) !important;
 }
 
 .login-ui input[type="text"]:hover,
@@ -356,15 +356,14 @@ a.ng-binding:not(.add-user):not(.button) {
 
 /* Custom Logo - Replace the default Guacamole logo */
 .login-ui .logo {
-    background-image: url('/guacamole/images/custom-logo.png') !important;
+    background-image: url('/guacamole/images/custom-logo.png?v=20250806') !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
-    width: 200px !important;
-    height: 80px !important;
+    width: 250px !important;
+    height: 100px !important;
     display: block !important;
-    min-height: 80px !important;
-    filter: invert(1) !important; /* Make black logo white */
+    min-height: 100px !important;
 }
 
 /* Hide the default logo text */
@@ -378,7 +377,7 @@ a.ng-binding:not(.add-user):not(.button) {
 }
 
 .login-ui .app-name:before {
-    content: "Fishtalk Control" !important;
+    content: "Fishtalk" !important;
     font-size: 18px !important;
     font-weight: bold !important;
     color: var(--text-hover) !important;
@@ -387,7 +386,7 @@ a.ng-binding:not(.add-user):not(.button) {
 
 /* Custom login screen title */
 .login-ui h1:before {
-    content: "Welcome to Fishtalk Control";
+    content: "Welcome to Fishtalk";
     font-size: 24px;
     color: var(--text-hover);
     display: block;
@@ -415,43 +414,60 @@ a.ng-binding:not(.add-user):not(.button) {
 }
 
 .login-ui .version-number:after {
-    content: "5.7.2" !important;
+    content: "Fishtalk 5.7.2" !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
     font-size: 12px !important;
-    color: rgb(var(--accent-color)) !important;
+    color: #a3a3a3 !important;
     font-weight: 500 !important;
     display: block !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    margin-top: 5px !important;
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 1002 !important;
 }
 
-/* Footer with custom image - login page */
-.login-ui:after {
-    content: "Powered by";
+/* Force override any green backgrounds on version number */
+.login-ui .version-number,
+.login-ui .version-number *,
+.login-ui .version-number:before {
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* Centered footer with image on login page */
+.login-ui .login-dialog:after {
+    content: "";
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--text-muted);
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-}
-
-.login-ui:before {
-    content: "";
-    position: fixed;
-    bottom: 18px;
-    left: calc(50% + 35px);
-    width: 80px;
-    height: 20px;
+    width: 120px;
+    height: 40px;
     background-image: url('/guacamole/images/custom-footer.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: center;
     z-index: 1001;
 }
 
-/* Footer branding for all other pages */
+/* "Powered by" text above the image */
+.login-ui .login-dialog:before {
+    content: "Powered by";
+    position: fixed;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    z-index: 1001;
+}
+
+/* Footer branding for all pages */
 body:after {
     content: "";
     position: fixed;
@@ -465,4 +481,28 @@ body:after {
     background-position: center;
     opacity: 0.6;
     z-index: 1000;
+}
+
+/* Hide corner footer on login pages only */
+.login-ui body:after,
+body.login-ui:after {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* ============================================= */
+/* CUSTOM TITLE OVERRIDE */
+/* ============================================= */
+
+/* Force browser title to always be Fishtalk Control */
+title {
+    visibility: hidden;
+}
+
+title:after {
+    content: "Fishtalk";
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
