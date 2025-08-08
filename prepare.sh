@@ -6,6 +6,8 @@ then
 	echo "docker daemon not running, will exit here!"
 	exit
 fi
+echo "Creating AKVA branded Guacamole"
+docker build AKVAmole ./Dockerfile
 echo "Preparing folder init and creating ./init/initdb.sql"
 mkdir ./init >/dev/null 2>&1
 mkdir -p ./nginx/ssl >/dev/null 2>&1

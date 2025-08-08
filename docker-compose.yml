@@ -99,7 +99,7 @@ services:
   # guacd
   guacd:
     container_name: guacd_compose
-    image: guacamole/guacd
+    image: guacamole/guacd:1.6.0
     networks:
       - guacnetwork_compose
     restart: always
@@ -137,7 +137,7 @@ services:
       POSTGRESQL_PASSWORD: 'ChooseYourOwnPasswordHere1234'
       POSTGRESQL_USER: guacamole_user
       RECORDING_SEARCH_PATH: /record
-    image: guacamole/guacamole
+    image: AKVAmole
     networks:
       - guacnetwork_compose
     volumes:
