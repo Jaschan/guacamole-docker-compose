@@ -7,8 +7,8 @@ then
 	exit
 fi
 echo "Creating AKVA branded Guacamole"
-zip -rq ./akva_branding/guacamole.war ./akva_branding/guacamole-1.6.0/
-docker build -t akvamole:1.6.0 .
+(cd ./akva_branding/guacamole-1.6.0/; zip -rq ../guacamole.war ./)
+sudo docker build -t akvamole:1.6.0 .
 rm -f ./akva_branding/guacamole.war
 echo "done"
 echo "Preparing folder init and creating ./init/initdb.sql"

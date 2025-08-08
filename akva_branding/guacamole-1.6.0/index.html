@@ -19,12 +19,12 @@
     <link rel="stylesheet" href="custom-branding.css">
     
     <!-- Custom Fishtalk Title -->
-    <title>Fishtalk Control</title>
+    <title>Fishtalk</title>
     
     <!-- Override Angular title binding with custom title -->
     <script>
         // Set document title immediately to prevent Angular from overriding
-        document.title = "Fishtalk Control";
+        document.title = "Fishtalk";
         
         // Override Angular's title updates
         (function() {
@@ -35,7 +35,7 @@
                         listener.call(this, event);
                         // Force title after Angular loads
                         setTimeout(function() {
-                            document.title = "Fishtalk Control";
+                            document.title = "Fishtalk";
                         }, 100);
                     };
                     return originalAddEventListener.call(this, type, wrappedListener, options);
@@ -96,8 +96,8 @@
         // Additional enforcement to ensure title stays as Fishtalk
         (function() {
             var titleObserver = new MutationObserver(function(mutations) {
-                if (document.title !== "Fishtalk Control") {
-                    document.title = "Fishtalk Control";
+                if (document.title !== "Fishtalk") {
+                    document.title = "Fishtalk";
                 }
             });
             
@@ -110,8 +110,8 @@
             
             // Also check periodically
             setInterval(function() {
-                if (document.title !== "Fishtalk Control") {
-                    document.title = "Fishtalk Control";
+                if (document.title !== "Fishtalk") {
+                    document.title = "Fishtalk";
                 }
             }, 1000);
         })();

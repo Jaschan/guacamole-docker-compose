@@ -371,7 +371,7 @@ a.ng-binding:not(.add-user):not(.button) {
     display: none !important;
 }
 
-/* Change Apache Guacamole to Fishtalk Control */
+/* Change Apache Guacamole to Fishtalk */
 .login-ui .app-name {
     font-size: 0 !important;
 }
@@ -494,7 +494,7 @@ body.login-ui:after {
 /* CUSTOM TITLE OVERRIDE */
 /* ============================================= */
 
-/* Force browser title to always be Fishtalk Control */
+/* Force browser title to always be Fishtalk */
 title {
     visibility: hidden;
 }
