@@ -1,0 +1,120 @@
+<!doctype html>
+<html ng-app="index" ng-controller="indexController">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,target-densitydpi=medium-dpi">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="build" content="20250616005750">
+    
+    <!-- Custom Fishtalk Favicon -->
+    <link rel="icon" type="image/png" href="images/custom-logo.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="images/custom-logo.png">
+    <link rel="apple-touch-icon" type="image/png" href="images/custom-logo.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="1.guacamole.6f7b293d2dba5a891aa5.css">
+    <link rel="stylesheet" href="app.css?b=20250616005750">
+    <link rel="stylesheet" href="app/custom-branding.css">
+    
+    <!-- Custom Fishtalk Title -->
+    <title>Fishtalk Control</title>
+    
+    <!-- Override Angular title binding with custom title -->
+    <script>
+        // Set document title immediately to prevent Angular from overriding
+        document.title = "Fishtalk Control";
+        
+        // Override Angular's title updates
+        (function() {
+            var originalAddEventListener = document.addEventListener;
+            document.addEventListener = function(type, listener, options) {
+                if (type === 'DOMContentLoaded') {
+                    var wrappedListener = function(event) {
+                        listener.call(this, event);
+                        // Force title after Angular loads
+                        setTimeout(function() {
+                            document.title = "Fishtalk Control";
+                        }, 100);
+                    };
+                    return originalAddEventListener.call(this, type, wrappedListener, options);
+                }
+                return originalAddEventListener.call(this, type, listener, options);
+            };
+        })();
+    </script>
+</head>
+<body ng-cloak translate-cloak ng-class="page.bodyClassName" ng-switch="applicationState">
+    <div class="logged-out-modal" ng-switch-when="loggedOut">
+        <guac-modal>
+            <div class="notification">
+                <p translate="APP.INFO_LOGGED_OUT"></p>
+                <p><button translate="APP.ACTION_LOGIN_AGAIN" ng-disabled="reAuthenticating" ng-click="reAuthenticate()"></button></p>
+            </div>
+        </guac-modal>
+    </div>
+    <div class="fatal-page-error-modal" ng-switch-when="fatalError">
+        <guac-modal>
+            <div class="fatal-page-error">
+                <h1 translate="APP.DIALOG_HEADER_ERROR"></h1>
+                <p translate="APP.ERROR_PAGE_UNAVAILABLE"></p>
+            </div>
+        </guac-modal>
+    </div>
+    <div class="automatic-login-rejected-modal" ng-switch-when="automaticLoginRejected">
+        <guac-modal>
+            <div class="notification">
+                <p translate="{{ fatalError.translatableMessage.key }}" translate-values="{{ fatalError.translatableMessage.variables }}"></p>
+                <p><button translate="APP.ACTION_LOGIN_AGAIN" ng-disabled="reAuthenticating" ng-click="reAuthenticate()"></button></p>
+            </div>
+        </guac-modal>
+    </div>
+    <guac-login ng-switch-when="awaitingCredentials" help-text="loginHelpText" form="expectedCredentials" values="acceptedCredentials"></guac-login>
+    <div ng-switch-when="ready">
+        <guac-modal class="global-status-modal" ng-if="guacNotification.getStatus()">
+            <guac-notification notification="guacNotification.getStatus()"></guac-notification>
+        </guac-modal>
+        <div id="content" ng-view></div>
+        <div id="other-connections">
+            <guac-client-panel client-groups="getManagedClientGroups()"></guac-client-panel>
+        </div>
+    </div>
+    <script src="Blob.js"></script>
+    <script src="datalist-polyfill.min.js"></script>
+    <script src="guacamole-common-js/all.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="angular.min.js"></script>
+    <script src="1.guacamole.7935cf403412cd79c600.js"></script>
+    <script src="guacamole.4baaa9df5aed3303a40f.js"></script>
+    <script src="templates.js"></script>
+    <script src="app.js?b=20250616005750"></script>
+    
+    <!-- Additional title enforcement after Angular loads -->
+    <script>
+        // Additional enforcement to ensure title stays as Fishtalk
+        (function() {
+            var titleObserver = new MutationObserver(function(mutations) {
+                if (document.title !== "Fishtalk Control") {
+                    document.title = "Fishtalk Control";
+                }
+            });
+            
+            // Start observing title changes
+            titleObserver.observe(document.querySelector('title'), {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+            
+            // Also check periodically
+            setInterval(function() {
+                if (document.title !== "Fishtalk Control") {
+                    document.title = "Fishtalk Control";
+                }
+            }, 1000);
+        })();
+    </script>
+</body>
+</html>

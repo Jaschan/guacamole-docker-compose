@@ -1,0 +1,209 @@
+---
+# ConfigMap for CSS and HTML files
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: guacamole-branding-files
+  namespace: default  # Change to your namespace
+  labels:
+    app: guacamole
+    component: branding
+data:
+  # The CSS content - you'll need to base64 encode or paste the actual content here
+  custom-branding.css: |
+    # PLACEHOLDER: Copy content from branding/branding-themepark.css
+    # Or use: kubectl create configmap guacamole-branding-files --from-file=custom-branding.css=branding/branding-themepark.css
+  
+  # Modified index.html with title enforcement
+  index.html: |
+    # PLACEHOLDER: Copy content from index/index.html
+    # Or use: kubectl create configmap guacamole-branding-files --from-file=index.html=index/index.html
+
+---
+# ConfigMap for binary image files
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: guacamole-branding-images
+  namespace: default  # Change to your namespace
+  labels:
+    app: guacamole
+    component: branding
+binaryData:
+  custom-logo.png: |
+    # PLACEHOLDER: Base64 encoded content of custom-logo.png
+    # Generate with: base64 -w 0 branding/images/custom-logo.png
+  
+  custom-footer.png: |
+    # PLACEHOLDER: Base64 encoded content of custom-footer.png
+    # Generate with: base64 -w 0 branding/images/custom-footer.png
+  
+  logo-64.png: |
+    # PLACEHOLDER: Base64 encoded content of custom-logo.png (same as above)
+  
+  logo-144.png: |
+    # PLACEHOLDER: Base64 encoded content of custom-logo.png (same as above)
+
+---
+# Updated Deployment with branding mounts
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guacamole
+  namespace: default  # Change to your namespace
+  labels:
+    app: guacamole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guacamole
+  template:
+    metadata:
+      labels:
+        app: guacamole
+    spec:
+      containers:
+      - name: guacamole
+        image: guacamole/guacamole:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GUACD_HOSTNAME
+          value: "guacd"
+        - name: POSTGRES_HOSTNAME
+          value: "postgres"
+        - name: POSTGRES_DATABASE
+          value: "guacamole_db"
+        - name: POSTGRES_USER
+          value: "guacamole_user"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: guacamole-postgres
+              key: password
+        
+        volumeMounts:
+        # Mount the custom CSS file
+        - name: branding-css
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/app/custom-branding.css
+          subPath: custom-branding.css
+          readOnly: true
+        
+        # Mount the modified index.html
+        - name: branding-html
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/index.html
+          subPath: index.html
+          readOnly: true
+        
+        # Mount custom images
+        - name: branding-images
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/images/custom-logo.png
+          subPath: custom-logo.png
+          readOnly: true
+        
+        - name: branding-images
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/images/custom-footer.png
+          subPath: custom-footer.png
+          readOnly: true
+        
+        # Mount favicon files
+        - name: branding-images
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/images/logo-64.png
+          subPath: logo-64.png
+          readOnly: true
+        
+        - name: branding-images
+          mountPath: /home/guacamole/tomcat/webapps/guacamole/images/logo-144.png
+          subPath: logo-144.png
+          readOnly: true
+        
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        readinessProbe:
+          httpGet:
+            path: /guacamole/
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        
+        livenessProbe:
+          httpGet:
+            path: /guacamole/
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+      
+      volumes:
+      # Volume for CSS file
+      - name: branding-css
+        configMap:
+          name: guacamole-branding-files
+          items:
+          - key: custom-branding.css
+            path: custom-branding.css
+      
+      # Volume for HTML file
+      - name: branding-html
+        configMap:
+          name: guacamole-branding-files
+          items:
+          - key: index.html
+            path: index.html
+      
+      # Volume for image files
+      - name: branding-images
+        configMap:
+          name: guacamole-branding-images
+
+---
+# Service for Guacamole
+apiVersion: v1
+kind: Service
+metadata:
+  name: guacamole
+  namespace: default  # Change to your namespace
+  labels:
+    app: guacamole
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: guacamole
+
+---
+# Ingress for external access (optional)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guacamole
+  namespace: default  # Change to your namespace
+  labels:
+    app: guacamole
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  rules:
+  - host: guacamole.yourdomain.com  # Change to your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: guacamole
+            port:
+              number: 8080

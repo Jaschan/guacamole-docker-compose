@@ -1,0 +1,9 @@
+{
+    "guacamoleVersion" : "*",
+    "name" : "Custom Branding",
+    "namespace" : "branding",
+    "css" : [ "branding.css" ],
+    "resources" : {
+        "images/" : "images"
+    }
+}
